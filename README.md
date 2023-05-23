@@ -230,3 +230,9 @@ by appending your own. A few useful ones are as follow.
 ./scripts/docker_run.sh cargo check
 ```
 # poe
+Based on Substrate framework, we realized the modules of proof of existence and writed the test case.
+you can see the case in ./pallets/poe/src/tests.rs
+the running results are as followed:
+<img width="1026" alt="image" src="https://github.com/TerryTyh/poe/assets/120092281/4b67954d-37a7-451c-bb35-a635474bc5ba">
+
+
