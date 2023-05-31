@@ -236,6 +236,15 @@ the running results are as followed:
 <img width="1026" alt="image" src="https://github.com/TerryTyh/poe/assets/120092281/4b67954d-37a7-451c-bb35-a635474bc5ba">
 
 # Kitties
+Kittes Pallet Test.rs 测试通过
 <img width="1237" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/d7c485be-30e2-48f5-ae5f-3f0a93a8a61f">
 
+Test.rs完善：增加event事件获取，并测试通过
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/0728d450-9e41-4474-a3aa-736683c6173b">
 
+Node编译通过&正常启动
+
+<img width="787" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/c231d9ad-ba6c-421e-ab56-b9106a70969b">
+
+
+by appending your own. A few useful ones are as follow.
