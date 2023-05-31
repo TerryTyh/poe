@@ -19,6 +19,26 @@ fn it_works_for_create(){
             KittiesModule::create(Origin::signed(account_id)),
             Error::<Test>::InvalidKittyId
         );
+        // 判断是否启用了KittyCreated事件
+        System::assert_has_event(
+            crate::Event::KittyCreated { 
+                who: account_id, 
+                kitty_id: kitty_id, 
+                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+            }.into()
+        );
+        // 判断最后一个事件是否是KittyCreated事件
+        System::assert_last_event(
+            crate::Event::KittyCreated { 
+                who: account_id, 
+                kitty_id: kitty_id, 
+                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+            }.into()
+        );
+        //判断当前事件数量是否为1
+        assert_eq!(System::events().len(), 1);
+
+
 
     }); 
         
@@ -61,6 +81,25 @@ fn it_works_for_breed(){
             KittiesModule::kitty_parents(breed_kitty_id),
             Some((kitty_id,kitty_id +1))
         );
+
+        // 判断是否启用了KittyBred事件
+        System::assert_has_event(
+            crate::Event::KittyBred { 
+                who: account_id, 
+                kitty_id: breed_kitty_id, 
+                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+            }.into()
+        );
+        // 判断最后一个事件是否是KittyBred事件
+        System::assert_last_event(
+            crate::Event::KittyBred { 
+                who: account_id, 
+                kitty_id: breed_kitty_id, 
+                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+            }.into()
+        );
+        //判断当前事件数量是否为3：2个create，1个breed
+        assert_eq!(System::events().len(), 3);
     });
 }
 
@@ -96,5 +135,33 @@ fn it_works_for_transfer(){
 
         assert_eq!(KittiesModule::kitty_owner(kitty_id),Some(account_id));
     
+        // 判断是否启用了KittyTransferred事件,完成从account_id向recipient 转移kitty
+        System::assert_has_event(
+            crate::Event::KittyTransferred { 
+                who: account_id, 
+                recipient: recipient,
+                kitty_id: kitty_id
+            }.into()
+        );
+
+        // 判断是否启用了KittyTransferred事件,完成从recipient向account_id 返还kitty
+        System::assert_has_event(
+            crate::Event::KittyTransferred { 
+                who: recipient, 
+                recipient: account_id,
+                kitty_id: kitty_id
+            }.into()
+        );
+
+        // 判断最后一个事件是否是KittyTransferred事件：从recipient向account_id 返还kitty
+        System::assert_last_event(
+            crate::Event::KittyTransferred { 
+                who: recipient, 
+                recipient: account_id,
+                kitty_id: kitty_id
+            }.into()
+        );
+        //判断当前事件数量是否为3：1个create，2个transfer
+        assert_eq!(System::events().len(), 3);
     });
 }

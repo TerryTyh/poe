@@ -140,7 +140,7 @@ pub mod pallet {
 		})
 	}
 
-	fn random_value(sender: &T::AccountId) -> [u8; 16] {
+	pub fn random_value(sender: &T::AccountId) -> [u8; 16] {
 		let payload = (
 			T::Randomness::random_seed(),
 			&sender,
