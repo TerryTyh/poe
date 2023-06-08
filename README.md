@@ -237,5 +237,11 @@ the running results are as followed:
 
 # Kitties
 <img width="1237" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/d7c485be-30e2-48f5-ae5f-3f0a93a8a61f">
+Buy和Sale方法及node运行：
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/76ceda96-2451-4cdd-a125-9c3b6f817be5">
+从v0、v1升级到v2的migration方法：
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/663e84d4-ed61-4eff-b85c-02cb7b148ca9">
+
+
 
 
