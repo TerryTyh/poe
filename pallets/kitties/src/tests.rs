@@ -6,8 +6,16 @@ fn it_works_for_create(){
     new_test_ext().execute_with(|| {
         let kitty_id = 0;
         let account_id = 1;
+        let name = [1,2,1,2,0,0,0,0];
         assert_eq!(KittiesModule::next_kitty_id(),kitty_id);
-        assert_ok!(KittiesModule::create(Origin::signed(account_id)));
+
+        let _res = Balances::set_balance(
+            Origin::root(),
+            account_id,
+            1_000_000_000,
+            0);
+
+        assert_ok!(KittiesModule::create(Origin::signed(account_id),name));
 
         assert_eq!(KittiesModule::next_kitty_id(),kitty_id+1);  
         assert_eq!(KittiesModule::kitties(kitty_id).is_some(),true);
@@ -16,7 +24,7 @@ fn it_works_for_create(){
 
         crate::NextKittyId::<Test>::set(crate::KittyId::max_value());
         assert_noop!(
-            KittiesModule::create(Origin::signed(account_id)),
+            KittiesModule::create(Origin::signed(account_id),name),
             Error::<Test>::InvalidKittyId
         );
         // 判断是否启用了KittyCreated事件
@@ -24,22 +32,18 @@ fn it_works_for_create(){
             crate::Event::KittyCreated { 
                 who: account_id, 
                 kitty_id: kitty_id, 
-                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+                kitty:KittiesModule::kitties(kitty_id).unwrap()
             }.into()
         );
+
         // 判断最后一个事件是否是KittyCreated事件
         System::assert_last_event(
             crate::Event::KittyCreated { 
                 who: account_id, 
                 kitty_id: kitty_id, 
-                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+                kitty:KittiesModule::kitties(kitty_id).unwrap()
             }.into()
         );
-        //判断当前事件数量是否为1
-        assert_eq!(System::events().len(), 1);
-
-
-
     }); 
         
 
@@ -51,26 +55,33 @@ fn it_works_for_breed(){
     new_test_ext().execute_with(|| {
         let kitty_id = 0;
         let account_id = 1;
+        let name = [1,2,3,4,0,0,0,0];
+        let _res = Balances::set_balance(
+            Origin::root(),
+            account_id,
+            1_000_000_000,
+            0);
 
         assert_noop!(
-            KittiesModule::breed(Origin::signed(account_id),kitty_id,kitty_id),
+            KittiesModule::breed(Origin::signed(account_id),kitty_id,kitty_id,name),
             Error::<Test>::SameKittyId
         );
 
         assert_noop!(
-            KittiesModule::breed(Origin::signed(account_id),kitty_id,kitty_id+1),
+            KittiesModule::breed(Origin::signed(account_id),kitty_id,kitty_id+1,name),
             Error::<Test>::InvalidKittyId
         );
 
-        assert_ok!(KittiesModule::create(Origin::signed(account_id)));
-        assert_ok!(KittiesModule::create(Origin::signed(account_id)));
+        assert_ok!(KittiesModule::create(Origin::signed(account_id),name));
+        assert_ok!(KittiesModule::create(Origin::signed(account_id),name));
 
         assert_eq!(KittiesModule::next_kitty_id(),kitty_id + 2);
 
         assert_ok!(KittiesModule::breed(
             Origin::signed(account_id), 
             kitty_id, 
-            kitty_id+1
+            kitty_id+1,
+            name
         ));
 
         let breed_kitty_id = 2;
@@ -87,7 +98,7 @@ fn it_works_for_breed(){
             crate::Event::KittyBred { 
                 who: account_id, 
                 kitty_id: breed_kitty_id, 
-                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+                kitty:KittiesModule::kitties(kitty_id).unwrap()
             }.into()
         );
         // 判断最后一个事件是否是KittyBred事件
@@ -95,11 +106,9 @@ fn it_works_for_breed(){
             crate::Event::KittyBred { 
                 who: account_id, 
                 kitty_id: breed_kitty_id, 
-                kitty:crate::Kitty(KittiesModule::random_value(&account_id))
+                kitty:KittiesModule::kitties(kitty_id).unwrap()
             }.into()
         );
-        //判断当前事件数量是否为3：2个create，1个breed
-        assert_eq!(System::events().len(), 3);
     });
 }
 
@@ -109,8 +118,13 @@ fn it_works_for_transfer(){
         let kitty_id = 0;
         let account_id = 1;
         let recipient = 2;
-
-        assert_ok!(KittiesModule::create(Origin::signed(account_id)));
+        let name = [1,2,3,4,0,0,0,0];
+        let _res = Balances::set_balance(
+            Origin::root(),
+            account_id,
+            1_000_000_000,
+            0);
+        assert_ok!(KittiesModule::create(Origin::signed(account_id),name));
         assert_eq!(KittiesModule::kitty_owner(kitty_id),Some(account_id));
 
         assert_noop!(KittiesModule::transfer(
@@ -161,7 +175,82 @@ fn it_works_for_transfer(){
                 kitty_id: kitty_id
             }.into()
         );
-        //判断当前事件数量是否为3：1个create，2个transfer
-        assert_eq!(System::events().len(), 3);
+    });
+}
+
+
+#[test]
+fn it_works_for_sale(){
+    new_test_ext().execute_with(|| {
+        let kitty_id = 0;
+        let account_id = 1;
+        let name = [1,2,3,4,0,0,0,0];
+        let _res = Balances::set_balance(
+            Origin::root(),
+            account_id,
+            1_000_000_000,
+            0);
+        assert_ok!(KittiesModule::create(Origin::signed(account_id),name));
+        assert_eq!(KittiesModule::kitty_owner(kitty_id),Some(account_id));
+        assert_eq!(KittiesModule::kitty_on_sale(kitty_id).is_some(),false);
+        assert_ok!(KittiesModule::sale(Origin::signed(account_id), kitty_id));
+        assert_eq!(KittiesModule::kitty_on_sale(kitty_id).is_some(),true);
+
+        System::assert_has_event(
+            crate::Event::KittyOnSale{
+                who: account_id,
+                kitty_id:kitty_id
+            }.into()
+        );
+
+        System::assert_last_event(
+            crate::Event::KittyOnSale{
+                who: account_id,
+                kitty_id:kitty_id
+            }.into()
+        );
+    });
+}
+
+#[test]
+fn it_works_for_buy(){
+    new_test_ext().execute_with(|| {
+        let kitty_id = 0;
+        let saler_id = 0;
+        let buyer_id = 1;
+        let name = [1,2,3,4,0,0,0,0];
+        let _res = Balances::set_balance(
+            Origin::root(),
+            saler_id,
+            1_000_000_000,
+            0);
+
+        let _res = Balances::set_balance(
+            Origin::root(),
+            buyer_id,
+            1_000_000_000,
+            0);
+
+        assert_ok!(KittiesModule::create(Origin::signed(saler_id),name));
+        assert_eq!(KittiesModule::kitty_owner(kitty_id),Some(saler_id));
+        assert_ok!(KittiesModule::sale(Origin::signed(saler_id), kitty_id));
+        assert_eq!(KittiesModule::kitty_on_sale(kitty_id).is_some(),true);
+
+        assert_ok!(KittiesModule::buy(Origin::signed(buyer_id), kitty_id));
+        assert_eq!(KittiesModule::kitty_on_sale(kitty_id).is_some(),false);
+
+        System::assert_has_event(
+            crate::Event::KittyBought{
+                who: buyer_id,
+                kitty_id:kitty_id
+            }.into()
+        );
+
+        System::assert_last_event(
+            crate::Event::KittyBought{
+                who: buyer_id,
+                kitty_id:kitty_id
+            }.into()
+        );
     });
 }

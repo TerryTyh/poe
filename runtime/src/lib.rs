@@ -33,7 +33,7 @@ pub use frame_support::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
 		IdentityFee, Weight,
 	},
-	StorageValue,
+	StorageValue,PalletId,
 };
 pub use frame_system::Call as SystemCall;
 pub use pallet_balances::Call as BalancesCall;
@@ -103,7 +103,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	//   `spec_version`, and `authoring_version` are the same between Wasm and native.
 	// This value is set to 100 to notify Polkadot-JS App (https://polkadot.js.org/apps) to use
 	//   the compatible custom types.
-	spec_version: 100,
+	spec_version: 200,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -148,6 +148,9 @@ parameter_types! {
 	pub const DeletionQueueDepth: u32 = 128;
 	pub DeletionWeightLimit: Weight = AVERAGE_ON_INITIALIZE_RATIO * BlockWeights::get().max_block;
 	pub Schedule: pallet_contracts::Schedule<Runtime> = Default::default();
+	pub KittyPalletId: PalletId = PalletId(*b"py/kitty");
+	pub KittyPrice: Balance = EXISTENTIAL_DEPOSIT * 10;
+
   }
   
   impl pallet_contracts::Config for Runtime {
@@ -328,6 +331,10 @@ impl pallet_poe::Config for Runtime {
 impl pallet_kitties::Config for Runtime {
 	type Event = Event;
 	type Randomness = RandomnessCollectiveFlip;
+	type Currency = Balances;
+	type PalletId = KittyPalletId;
+	type KittyPrice = KittyPrice;
+
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -352,6 +359,7 @@ construct_runtime!(
 		PoeModule: pallet_poe,
 		KittiesModule: pallet_kitties,
 		Nicks: pallet_nicks,
+
 	}
 );
 
