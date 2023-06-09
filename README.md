@@ -241,6 +241,9 @@ Buy和Sale方法及node运行：
 <img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/76ceda96-2451-4cdd-a125-9c3b6f817be5">
 从v0、v1升级到v2的migration方法：
 <img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/663e84d4-ed61-4eff-b85c-02cb7b148ca9">
+升级后，可成功创建kitty
+<img width="1271" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/187b7533-2386-49fc-9fa0-02049892da11">
+可sale kitty
 
 
 
