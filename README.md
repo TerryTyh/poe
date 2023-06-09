@@ -236,7 +236,8 @@ the running results are as followed:
 <img width="1026" alt="image" src="https://github.com/TerryTyh/poe/assets/120092281/4b67954d-37a7-451c-bb35-a635474bc5ba">
 
 # Kitties
-<img width="1237" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/d7c485be-30e2-48f5-ae5f-3f0a93a8a61f">
+Test.rs中调整Kitty数据结构，补充Buy和Sale方法的测试，测试通过
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/c8db0db0-d14f-4f7e-82ee-d86ebbceea58">
 Buy和Sale方法及node运行：
 <img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/76ceda96-2451-4cdd-a125-9c3b6f817be5">
 从v0、v1升级到v2的migration方法：
