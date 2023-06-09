@@ -244,6 +244,11 @@ Buy和Sale方法及node运行：
 升级后，可成功创建kitty
 <img width="1271" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/187b7533-2386-49fc-9fa0-02049892da11">
 可sale kitty
+<img width="1263" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/cbc613a2-cac4-4994-b2df-febc25196991">
+<img width="1278" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/069a1d2d-6b89-4146-b7f1-64b442eb1c09">
+可buy kitty
+<img width="1259" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/3d361702-7b13-4ed3-a7de-23247fe28c36">
+<img width="1257" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/134a5f19-b4e3-4a75-a6bf-9a9ac0dc6e45">
 
 
 
