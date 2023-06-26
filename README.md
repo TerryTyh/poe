@@ -238,4 +238,16 @@ the running results are as followed:
 # Kitties
 <img width="1237" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/d7c485be-30e2-48f5-ae5f-3f0a93a8a61f">
 
+# poe_benchmarks
+benchmarks编译：cargo build --release --features runtime-benchmarks
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/e38f00cb-4f5b-4dcf-9265-a448d68e12d9">
+
+运行benhmarks：./target/release/node-template benchmark pallet --chain dev --execution wasm --wasm-execution compiled --pallet pallet_poe --extrinsic "*" --steps 20 --repeat 10 --output ./pallets/poe/src/weights.rs --template .maintain/frame-weight-template.hbs
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/a4b09f93-9a04-4fa7-842a-d0cf288ab5c3">
+
+查看weight.rs
+<img width="1280" alt="image" src="https://github.com/TerryTyh/substrate-node-template/assets/120092281/4d4d715a-fdde-4df1-9a21-3908ced04c6c">
+
+
+
 
