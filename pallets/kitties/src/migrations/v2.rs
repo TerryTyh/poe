@@ -3,6 +3,7 @@ use frame_support::{
     traits::GetStorageVersion,
     storage::StoragePrefixedMap,
     weights::Weight,
+    log
 };
 use frame_support::{migration::storage_key_iter,Blake2_128Concat};
 
@@ -44,10 +45,13 @@ fn v0_to_2<T: crate::Config>() {
     let module = crate::Kitties::<T>::module_prefix();
     let item = crate::Kitties::<T>::storage_prefix();  
     for (index,kitty) in storage_key_iter::<crate::KittyId,OldKittyV0,Blake2_128Concat>(module,item).drain(){
+        log::info!("进入v0_to_v2啦");
+        //crate::log::info!(""进入v0_to_v2啦"");
         let new_kitty_1 = crate::Kitty {
             dna: kitty.0,
             name: *b"abcd0000",
         };
+        log::info!("{}:{:?}",index,new_kitty_1);
         crate::Kitties::<T>::insert(index,new_kitty_1);
     }
 }
@@ -56,6 +60,7 @@ fn v1_to_2<T: crate::Config>() {
     let module = crate::Kitties::<T>::module_prefix();
     let item = crate::Kitties::<T>::storage_prefix();  
     for (index,kitty) in storage_key_iter::<crate::KittyId,OldKittyV1,Blake2_128Concat>(module,item).drain(){
+        log::info!("进入v1_to_v2啦");
         let temp_name = [kitty.name,*b"0000"].concat();
         let mut new_name:[u8;8] = [0;8];
         for (i,_) in temp_name.iter().enumerate() {
@@ -66,7 +71,7 @@ fn v1_to_2<T: crate::Config>() {
             dna: kitty.dna,
             name:new_name,
         };
-
+        log::info!("{}:{:?}",index,new_kitty_2);
         crate::Kitties::<T>::insert(index,new_kitty_2);
     }
 }
